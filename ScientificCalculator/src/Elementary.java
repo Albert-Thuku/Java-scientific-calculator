@@ -320,10 +320,12 @@ public class Elementary extends JFrame implements ActionListener {
 
                 case "^":
                     r = Math.pow(num1, num2);
+                    break;
 
                 case "y":
                     double c = 1 / num2;
                     r = Math.pow(num1, c);
+                    break;
 
                 default:
                     r = num1;
