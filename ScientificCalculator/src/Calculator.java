@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.*;
 import java.lang.Math;
 
-public class Elementary extends JFrame implements ActionListener {
+public class Calculator extends JFrame implements ActionListener {
 
     JFrame calc = new JFrame();
 
@@ -49,7 +49,7 @@ public class Elementary extends JFrame implements ActionListener {
     JButton ln = new JButton("ln");
     JButton log10 = new JButton("log10");
     JButton x = new JButton("x!");
-    JButton e = new JButton("e");
+    JButton expo = new JButton("e");
     JButton EE = new JButton("EE");
     JButton RAD = new JButton("RAD");
     JButton pii = new JButton("π");
@@ -59,9 +59,9 @@ public class Elementary extends JFrame implements ActionListener {
 
     private JButton opbuttons[] = { butplus, butminus, butdivide, butmultiply, butequal };
 
-    private JButton complexbuttons[] = { square, cube, expoon, dix, butclr, plusmin, pourcent,
-            oneover, sqroot, cuberoot, yroot, sinee, cosinee, tangentt, sineh, cosineh, tangenth,
-            ex, ln, log10, x, e, EE, RAD, pii, bck };
+    private JButton complexbuttons[] = { square, cube, expoon, dix, butclr, plusmin, pourcent, oneover, sqroot,
+            cuberoot, yroot, sinee, cosinee, tangentt, sineh, cosineh, tangenth, ex, ln, log10, x, expo, EE, RAD, pii,
+            bck };
 
     JPanel pan = new JPanel();
 
@@ -70,9 +70,11 @@ public class Elementary extends JFrame implements ActionListener {
     String Operator;
     Double num1;
     Double num2;
+    String string;
+    String a;
     Double r;
 
-    Elementary() {
+    public Calculator() {
         calc.setMinimumSize(new Dimension(1000, 500));
         calc.setTitle("Calculator");
         calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +82,7 @@ public class Elementary extends JFrame implements ActionListener {
         calc.setLayout(new BorderLayout());
 
         pan.setBackground(new Color(30, 30, 30));
-        pan.setSize(2000, 3000);
+        pan.setSize(700, 300);
         pan.setLayout(new GridLayout(6, 7));
 
         text.setBounds(0, 0, 300, 200);
@@ -127,7 +129,7 @@ public class Elementary extends JFrame implements ActionListener {
         pan.add(log10);
         pan.add(butdivide);
         pan.add(x);
-        pan.add(e);
+        pan.add(expo);
         pan.add(EE);
         pan.add(but7);
         pan.add(but8);
@@ -161,6 +163,16 @@ public class Elementary extends JFrame implements ActionListener {
         calc.setVisible(true);
     }
 
+    public double facts(double a) {
+        double b = 1;
+        double c = a;
+        for (double i = c; i > 0; i--) {
+            b = b * i;
+        }
+        return b;
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == but0) {
             text.setText(text.getText().concat("0"));
@@ -278,6 +290,19 @@ public class Elementary extends JFrame implements ActionListener {
             r = Math.sqrt(num1);
             text.setText(String.valueOf(r));
         }
+        if (e.getSource() == x) {
+            num1 = Double.parseDouble(text.getText());
+            r = facts(num1);
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == EE) {
+            string = text.getText();
+            Operator = "EE";
+            double b = string.length() - 1;
+            double co = Double.parseDouble(string);
+            co = co / (Math.pow(10, b));
+            text.setText(String.valueOf(co) + "E" + String.valueOf(b));
+        }
         if (e.getSource() == cuberoot) {
             num1 = Double.parseDouble(text.getText());
             r = Math.cbrt(num1);
@@ -288,9 +313,37 @@ public class Elementary extends JFrame implements ActionListener {
             r = num1 / 100;
             text.setText(String.valueOf(r));
         }
+        if (e.getSource() == expo) {
+            r = Math.exp(1);
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == pii) {
+            r = Math.PI;
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == RAD) {
+            num1 = Double.parseDouble(text.getText());
+            r = Math.toRadians(num1);
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == ex) {
+            num1 = Double.parseDouble(text.getText());
+            r = Math.exp(num1);
+            text.setText(String.valueOf(r));
+        }
         if (e.getSource() == oneover) {
             num1 = Double.parseDouble(text.getText());
             r = 1 / num1;
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == ln) {
+            num1 = Double.parseDouble(text.getText());
+            r = Math.log(num1);
+            text.setText(String.valueOf(r));
+        }
+        if (e.getSource() == log10) {
+            num1 = Double.parseDouble(text.getText());
+            r = Math.log10(num1);
             text.setText(String.valueOf(r));
         }
         if (e.getSource() == yroot) {
@@ -300,45 +353,55 @@ public class Elementary extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == butequal) {
-            num2 = Double.parseDouble(text.getText());
-            switch (Operator) {
-                case "+":
-                    r = num1 + num2;
-                    break;
+            try {
+                num2 = Double.parseDouble(text.getText());
+                switch (Operator) {
+                    case "+":
+                        r = num1 + num2;
+                        break;
+                    case "-":
+                        r = num1 - num2;
+                        break;
+                    case "*":
+                        r = num1 * num2;
+                        break;
+                    case "/":
+                        if (num2 == 0) {
+                            throw new ArithmeticException("Division by zero");
+                        }
+                        r = num1 / num2;
+                        break;
+                    case "^":
+                        r = Math.pow(num1, num2);
+                        break;
 
-                case "-":
-                    r = num1 - num2;
-                    break;
+                    case "y":
+                        double c = 1 / num2;
+                        r = Math.pow(num1, c);
+                        break;
 
-                case "*":
-                    r = num1 * num2;
-                    break;
+                    case "EE":
+                        int b = string.length() - 1;
+                        double co = Double.parseDouble(string);
+                        co = co / (10 * b);
+                        break;
 
-                case "/":
-                    r = num1 / num2;
-                    break;
-
-                case "^":
-                    r = Math.pow(num1, num2);
-                    break;
-
-                case "y":
-                    double c = 1 / num2;
-                    r = Math.pow(num1, c);
-                    break;
-
-                default:
-                    r = num1;
-                    break;
-
-            }
-            if (r == null) {
-                text.setText("ERROR!");
-            } else {
-                text.setText(String.valueOf(r));
-                num1 = r;
+                    default:
+                        r = num1;
+                        break;
+                }
+            } catch (ArithmeticException ae) {
+                text.setText("Error: " + ae.getMessage());
+            } catch (NumberFormatException nfe) {
+                text.setText("Error: Invalid input");
+            } finally {
+                if (r != null) {
+                    text.setText(String.valueOf(r));
+                    num1 = r;
+                }
             }
         }
+
         if (e.getSource() == butclr) {
             text.setText("");
         }
@@ -352,6 +415,6 @@ public class Elementary extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new Elementary();
+        new Calculator();
     }
 }
